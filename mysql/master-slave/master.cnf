@@ -1,0 +1,28 @@
+[mysqld]
+rocksdb
+default-storage-engine=rocksdb
+#skip-innodb
+allow-multiple-engines
+default-tmp-storage-engine=MyISAM
+collation-server=latin1_bin #(or utf8_bin, binary)
+datadir=/mysql_terarkdb/data
+user=mysql
+
+log-bin=/mysql_terarkdb/log/mysql-bin.log
+binlog-format=ROW
+
+server-id=1
+gtid_mode=ON
+enforce_gtid_consistency=ON
+log_slave_updates=ON
+
+log_error=/mysql_terarkdb/log/mysql_error.log
+general_log_file = /mysql_terarkdb/log/mysql.log
+general_log      = 1
+
+sync-binlog=1
+binlog-order-commit=1
+rocksdb-flush-log-at-trx-commit=1
+rocksdb-wal-recovery-mode=1
+rocksdb-enable-2pc=1
+

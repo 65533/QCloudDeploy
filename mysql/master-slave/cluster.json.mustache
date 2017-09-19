@@ -1,0 +1,146 @@
+{
+    "name": {{cluster.name}},
+    "description": {{cluster.description}},
+    "vxnet": {{cluster.vxnet}},
+    "nodes": [{
+        "role": "master",
+        "container": {
+            "type": "kvm",
+            "zone": "pek3a",
+            "image": "img-iap9eki0"
+        },
+        "count": 1,
+        "cpu": {{cluster.master.cpu}},
+        "memory": {{cluster.master.memory}},
+        "instance_class": {{cluster.master.instance_class}},
+        "volume": {
+            "size": {{cluster.master.volume_size}},
+            "class": {{cluster.master.volume_class}}, 
+            "mount_point": "/mysql_terarkdb",
+            "filesystem": "ext4"
+        },
+        "services": {
+            "init": {
+                "post_start_service": true,
+                "cmd": "/usr/local/mysql-on-terarkdb/scripts/update-members.sh master",
+                "timeout": 600
+            },
+            "start": {
+                "cmd": "/usr/local/mysql-on-terarkdb/scripts/start.sh master",
+                "timeout": 600
+            },
+            "stop": {
+                "cmd": "/usr/local/mysql-on-terarkdb/scripts/stop.sh",
+                "timeout": 600
+            },
+            "log-sync": {
+                "type": "custom",
+                "cmd": "/usr/local/mysql-on-terarkdb/scripts/sync-logs.sh",
+                "service_params": {
+                    "service_param": {{service_params.log_param}}
+                },
+                "timeout": 600
+            }
+        }
+    },
+    {
+        "role": "slave",
+        "container": {
+            "type": "kvm",
+            "zone": "pek3a",
+            "image": "img-iap9eki0"
+        },
+        "count": 1,
+        "cpu": {{cluster.slave.cpu}},
+        "memory": {{cluster.slave.memory}},
+        "instance_class": {{cluster.slave.instance_class}},
+        "volume": {
+            "size": {{cluster.slave.volume_size}},
+            "class": {{cluster.slave.volume_class}}, 
+            "mount_point": "/mysql_terarkdb",
+            "filesystem": "ext4"
+        },
+        "services": {
+            "init": {
+                "post_start_service": true,
+                "cmd": "/usr/local/mysql-on-terarkdb/scripts/update-members.sh slave",
+                "timeout": 600
+            },
+            "start": {
+                "cmd": "/usr/local/mysql-on-terarkdb/scripts/start.sh slave",
+                "timeout": 600
+            },
+            "stop": {
+                "cmd": "/usr/local/mysql-on-terarkdb/scripts/stop.sh",
+                "timeout": 600
+            },
+            "log-sync": {
+                "type": "custom",
+                "cmd": "/usr/local/mysql-on-terarkdb/scripts/sync-logs.sh",
+                "service_params": {
+                    "service_param": {{service_params.log_param}}
+                },
+                "timeout": 600
+            }
+        }
+    }],
+    "env": {
+        "default-storage-engine": {{env.default-storage-engine}},
+        "default-tmp-storage-engine": {{env.default-tmp-storage-engine}},
+        "datadir": {{env.datadir}},
+        "binlog-format": {{env.binlog-format}},
+        "gtid_mode": {{env.gtid_mode}},
+        "log_error": {{env.log_error}},
+        "general_log_file": {{env.general_log_file}}
+    },
+    "monitor": {
+        "enable": true,
+        "cmd": "/usr/local/mysql-on-terarkdb/scripts/monitor.sh",
+        "items": {
+            "Queries": {
+                "unit": "times",
+                "value_type": "int",
+                "statistics_type": "delta",
+                "scale_factor_when_display": 1
+            },
+            "Com_commit": {
+                "unit": "times",
+                "value_type": "int",
+                "statistics_type": "delta",
+                "scale_factor_when_display": 1
+            },
+            "Com_rollback": {
+                "unit": "times",
+                "value_type": "int",
+                "statistics_type": "delta",
+                "scale_factor_when_display": 1
+            },
+            "Qcache_hits": {
+                "unit": "times",
+                "value_type": "int",
+                "statistics_type": "rate",
+                "scale_factor_when_display": 1
+            },
+            "Threads_connected": {
+                "unit": "times",
+                "value_type": "int",
+                "statistics_type": "delta",
+                "scale_factor_when_display": 1
+            },
+            "Slow_queries": {
+                "unit": "times",
+                "value_type": "int",
+                "statistics_type": "delta",
+                "scale_factor_when_display": 1
+            }
+        },
+        "groups": {
+            "queries": ["Queries"],
+            "transactions": ["Com_commit", "Com_rollback"],
+            "hits": ["Qcache_hits"],
+            "thread-connections": ["Threads_connected"],
+            "slow-queries": ["Slow_queries"]
+        },
+        "display": ["queries", "transactions", "hits", "thread-connections", "slow-queries"]
+    }
+}

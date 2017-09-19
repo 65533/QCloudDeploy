@@ -1,0 +1,210 @@
+{
+    "type": "array",
+    "properties": [
+        {
+            "key": "cluster",
+            "description": "MySQL cluster properties",
+            "type": "array",
+            "properties": [
+                {
+                    "key": "name",
+                    "label": "Name",
+                    "description": "The name of the DB service",
+                    "type": "string",
+                    "default": "MySQL",
+                    "required": "no"
+                },
+                {
+                    "key": "description",
+                    "label": "Description",
+                    "description": "The description of the DB service",
+                    "type": "string",
+                    "default": "",
+                    "required": "no"
+                },
+                {
+                    "key": "vxnet",
+                    "label": "VxNet",
+                    "description": "Choose a vxnet to join",
+                    "type": "string",
+                    "default": "",
+                    "required": "yes"
+                },
+                {
+                    "key": "master",
+                    "label": "Master",
+                    "description": "MySQL master",
+                    "type": "array",
+                    "properties": [
+                        {
+                            "key": "cpu",
+                            "label": "CPU",
+                            "description": "CPUs of each node",
+                            "type": "integer",
+                            "default": 2,
+                            "range": [
+                                2,
+                                4,
+				                8
+                            ],
+                            "required": "yes"
+                        },
+                        {
+                            "key": "memory",
+                            "label": "Memory",
+                            "description": "Memory of each node",
+                            "type": "integer",
+                            "default": 4096,
+                            "range": [
+                                4096,
+                                6144,
+                                8192,
+				                16384,
+				                32768
+                            ],
+                            "required": "yes"
+                        },
+                        {
+                            "key": "volume_size",
+                            "label": "Volume size",
+                            "description": "The volume size for each instance",
+                            "type": "integer",
+                            "default": 30,
+                            "min": 10,
+                            "max": 1000,
+                            "required": "yes"
+                        },
+                        {
+                            "key": "volume_class",
+                            "label": "Volume class",
+                            "description": "The volume type for each instance，such as high performance，high performance plus",
+                            "type": "integer",
+                            "default": 0,
+                            "range": [0,3],
+                            "required": "yes"
+                        },
+                        {
+                            "key": "count",
+                            "label": "Count",
+                            "description": "Number of nodes for the cluster to create",
+                            "type": "integer",
+                            "default": 1,
+                            "range": [
+                                1
+                            ],
+                            "required": "no"
+                        },
+                        {
+                            "key": "instance_class",
+                            "label": "Resource type",
+                            "description": "The instance type for the cluster to run, such as high performance, high performance plus",
+                            "type": "integer",
+                            "default": 0,
+                            "range": [
+                                0,
+                                1
+                            ],
+                            "required": "yes"
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "key": "env",
+            "description": "application configuration properties",
+            "type": "array",
+            "properties": [{
+                "key": "default-storage-engine",
+                "label": "default-storage-engine",
+                "description": "default-storage-engine",
+                "type": "string",
+                "changeable": true,
+                "default": "rocksdb",
+                "separator": ",",
+                "range": ["rocksdb"],
+                "multichoice": false,
+                "required": "no"
+            }, {
+                "key": "default-tmp-storage-engine",
+                "label": "default-tmp-storage-engine",
+                "description": "default-tmp-storage-engine",
+                "type": "string",
+                "changeable": true,
+                "default": "MyISAM",
+                "separator": ",",
+                "range": ["MyISAM"],
+                "multichoice": false,
+                "required": "no"
+            }, {
+                "key": "datadir",
+                "label": "datadir",
+                "description": "datadir",
+                "type": "string",
+                "changeable": true,
+                "default": "/mysql_terarkdb/data",
+                "separator": ",",
+                "range": ["/mysql_terarkdb/data"],
+                "multichoice": false,
+                "required": "no"
+            }, {
+                "key": "binlog-format",
+                "label": "binlog-format",
+                "description": "binlog-format",
+                "type": "string",
+                "changeable": true,
+                "default": "ROW",
+                "separator": ",",
+                "range": ["ROW"],
+                "multichoice": false,
+                "required": "no"
+            }, {
+                "key": "gtid_mode",
+                "label": "gtid_mode",
+                "description": "gtid_mode",
+                "type": "string",
+                "changeable": true,
+                "default": "ON",
+                "separator": ",",
+                "range": ["ON"],
+                "multichoice": false,
+                "required": "no"
+            }, {
+                "key": "log_error",
+                "label": "log_error",
+                "description": "log_error",
+                "type": "string",
+                "changeable": true,
+                "default": "/mysql_terarkdb/log/mysql_error.log",
+                "separator": ",",
+                "range": ["/mysql_terarkdb/log/mysql_error.log"],
+                "multichoice": false,
+                "required": "no"
+            }, {
+                "key": "general_log_file",
+                "label": "general_log_file",
+                "description": "general_log_file",
+                "type": "string",
+                "changeable": true,
+                "default": "/mysql_terarkdb/log/mysql.log",
+                "separator": ",",
+                "range": ["/mysql_terarkdb/log/mysql.log"],
+                "multichoice": false,
+                "required": "no"
+            }]
+        },
+        {
+            "key": "service_params",
+            "description": "Custom service configuration properties",
+            "type": "array",
+            "properties": [{
+                "key": "log_param",
+                "label": "get logs",
+                "description": "To get log files, 'wget --ftp-user=mysql_logs --ftp-password=123456 ftp://host/log-file-name",
+                "type": "string",
+                "range": ["mysql.log", "mysql_error.log"],
+                "required": "yes"
+            }]
+        }
+    ]
+}
