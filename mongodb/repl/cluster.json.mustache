@@ -1,0 +1,130 @@
+{
+    "name": {{cluster.name}},
+    "description": {{cluster.description}},
+    "vxnet": {{cluster.vxnet}},
+    "nodes": [{
+        "role": "replica",
+        "container": {
+            "type": "kvm",
+            "zone": "pek3a",
+            "image": "img-maiz9wbv"
+        },
+        "count": {{cluster.replica.count}},
+        "cpu": {{cluster.replica.cpu}},
+        "memory": {{cluster.replica.memory}},
+        "instance_class": {{cluster.replica.instance_class}},
+        "volume": {
+            "size": {{cluster.replica.volume_size}},
+            "class": {{cluster.replica.volume_class}}, 
+            "mount_point": "/mongo_terocks",
+            "filesystem": "ext4"
+        },
+        "services": {
+            "init": {
+                "nodes_to_execute_on": 1,
+                "post_start_service": true,
+                "cmd": "/opt/mongo/bin/update-members.sh init",
+                "timeout": 86400
+            },
+            "start": {
+                "cmd": "/opt/mongo/bin/start.sh repl",
+                "timeout": 86400
+            },
+            "stop": {
+                "cmd": "/opt/mongo/bin/stop.sh",
+                "timeout": 86400
+            },
+            "log-sync": {
+                "type": "custom",
+                "cmd": "/opt/mongo/bin/sync-logs.sh",
+                "service_params": {
+                    "service_param": {{service_params.log_param}}
+                },
+                "timeout": 86400
+            }
+        }
+    },
+    {
+        "role": "priority0",
+        "container": {
+            "type": "kvm",
+            "zone": "pek3a",
+            "image": "img-maiz9wbv"
+        },
+        "count": {{cluster.priority0.count}},
+        "cpu": {{cluster.priority0.cpu}},
+        "memory": {{cluster.priority0.memory}},
+        "instance_class": {{cluster.priority0.instance_class}},
+        "volume": {
+            "size": {{cluster.priority0.volume_size}},
+            "class": {{cluster.priority0.volume_class}},
+            "mount_point": "/mongo_terocks",
+            "filesystem": "ext4"
+        },
+        "services": {
+            "start": {
+                "cmd": "/opt/mongo/bin/start.sh repl",
+                "timeout": 86400
+            },
+            "stop": {
+                "cmd": "/opt/mongo/bin/stop.sh",
+                "timeout": 86400
+            },
+            "log-sync": {
+                "type": "custom",
+                "cmd": "/opt/mongo/bin/sync-logs.sh",
+                "service_params": {
+                    "service_param": {{service_params.log_param}}
+                },
+                "timeout": 86400
+            }
+        }
+    }],
+    "monitor": {
+        "enable": true,
+        "cmd": "/opt/mongo/bin/monitor.sh",
+        "items": {
+            "current": {
+                "unit": "times",
+                "value_type": "int",
+                "statistics_type": "delta",
+                "scale_factor_when_display": 1
+            },
+            "available": {
+                "unit": "times",
+                "value_type": "int",
+                "statistics_type": "delta",
+                "scale_factor_when_display": 1
+            },
+            "insert": {
+                "unit": "times",
+                "value_type": "int",
+                "statistics_type": "delta",
+                "scale_factor_when_display": 1
+            },
+            "query": {
+                "unit": "times",
+                "value_type": "int",
+                "statistics_type": "delta",
+                "scale_factor_when_display": 1
+            },
+            "update": {
+                "unit": "times",
+                "value_type": "int",
+                "statistics_type": "delta",
+                "scale_factor_when_display": 1
+            },
+            "delete": {
+                "unit": "times",
+                "value_type": "int",
+                "statistics_type": "delta",
+                "scale_factor_when_display": 1
+            }
+        },
+        "groups": {
+            "connections": ["current", "available"],
+            "opcounters": ["insert", "query", "update", "delete"]
+        },
+        "display": ["connections", "opcounters"]
+    }
+}

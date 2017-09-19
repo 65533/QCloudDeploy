@@ -1,0 +1,205 @@
+{
+    "type": "array",
+    "properties": [
+        {
+            "key": "cluster",
+            "description": "Mongo cluster properties",
+            "type": "array",
+            "properties": [
+                {
+                    "key": "name",
+                    "label": "Name",
+                    "description": "The name of the DB service",
+                    "type": "string",
+                    "default": "Mongo",
+                    "required": "no"
+                },
+                {
+                    "key": "description",
+                    "label": "Description",
+                    "description": "The description of the DB service",
+                    "type": "string",
+                    "default": "",
+                    "required": "no"
+                },
+                {
+                    "key": "vxnet",
+                    "label": "VxNet",
+                    "description": "Choose a vxnet to join",
+                    "type": "string",
+                    "default": "",
+                    "required": "yes"
+                },
+                {
+                    "key": "replica",
+                    "label": "Replica",
+                    "description": "Mongo replica",
+                    "type": "array",
+                    "properties": [
+                        {
+                            "key": "cpu",
+                            "label": "CPU",
+                            "description": "CPUs of each node",
+                            "type": "integer",
+                            "default": 2,
+                            "range": [
+                                2,
+                                4,
+				                8
+                            ],
+                            "required": "yes"
+                        },
+                        {
+                            "key": "memory",
+                            "label": "Memory",
+                            "description": "memory of each node",
+                            "type": "integer",
+                            "default": 4096,
+                            "range": [
+                                4096,
+                                6144,
+                                8192,
+				                16384,
+				                32768
+                            ],
+                            "required": "yes"
+                        },
+                        {
+                            "key": "volume_size",
+                            "label": "Volume size",
+                            "description": "The volume size for each instance",
+                            "type": "integer",
+                            "default": 60,
+                            "min": 10,
+                            "max": 1000,
+                            "required": "yes"
+                        },
+                        {
+                            "key": "volume_class",
+                            "label": "Volume class",
+                            "description": "The volume type for each instance，such as high performance，high performance plus",
+                            "type": "integer",
+                            "default": 0,
+                            "range": [0,3],
+                            "required": "yes"
+                        },
+                        {
+                            "key": "count",
+                            "label": "Count",
+                            "description": "Number of nodes for the cluster to create",
+                            "type": "integer",
+                            "default": 1,
+                            "range": [
+                                1
+                            ],
+                            "required": "no"
+                        },
+                        {
+                            "key": "instance_class",
+                            "label": "Resource type",
+                            "description": "The instance type for the cluster to run, such as high performance, high performance plus",
+                            "type": "integer",
+                            "default": 0,
+                            "range": [
+                                0,
+                                1
+                            ],
+                            "required": "yes"
+                        }
+                    ]
+                }, 
+                {
+                    "key": "priority0",
+                    "label": "Priority0",
+                    "description": "Mongo Secondary",
+                    "type": "array",
+                    "properties": [
+                        {
+                            "key": "cpu",
+                            "label": "CPU",
+                            "description": "CPUs of each node",
+                            "type": "integer",
+                            "default": 2,
+                            "range": [
+                                2,
+                                4,
+                                8
+                            ],
+                            "required": "yes"
+                        },
+                        {
+                            "key": "memory",
+                            "label": "Memory",
+                            "description": "memory of each node",
+                            "type": "integer",
+                            "default": 4096,
+                            "range": [
+                                4096,
+                                6144,
+                                8192,
+                                16384,
+                                32768
+                            ],
+                            "required": "yes"
+                        },
+                        {
+                            "key": "volume_size",
+                            "label": "Volume size",
+                            "description": "The volume size for each instance",
+                            "type": "integer",
+                            "default": 60,
+                            "min": 10,
+                            "max": 1000,
+                            "required": "yes"
+                        },
+                        {
+                            "key": "volume_class",
+                            "label": "Volume class",
+                            "description": "The volume type for each instance，such as high performance，high performance plus",
+                            "type": "integer",
+                            "default": 0,
+                            "range": [0,3],
+                            "required": "yes"
+                        },
+                        {
+                            "key": "count",
+                            "label": "Count",
+                            "description": "Number of nodes for the cluster to create",
+                            "type": "integer",
+                            "default": 1,
+                            "range": [
+                                1
+                            ],
+                            "required": "no"
+                        },
+                        {
+                            "key": "instance_class",
+                            "label": "Resource type",
+                            "description": "The instance type for the cluster to run, such as high performance, high performance plus",
+                            "type": "integer",
+                            "default": 0,
+                            "range": [
+                                0,
+                                1
+                            ],
+                            "required": "yes"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "service_params",
+            "description": "Custom service configuration properties",
+            "type": "array",
+            "properties": [{
+                "key": "log_param",
+                "label": "get logs",
+                "description": "To get log files, 'wget --ftp-user=mongo_logs --ftp-password=123456 ftp://host/log-file-name",
+                "type": "string",
+                "range": ["mongod.log"],
+                "required": "yes"
+            }]
+        }
+    ]
+}
